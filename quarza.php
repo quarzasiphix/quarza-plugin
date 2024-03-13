@@ -5,11 +5,12 @@
  * Author: quarza
  * Version 1.0.0
  * 
- */
+*/
 
- if(  !defined('ABSPATH')) {
+
+if(!defined('ABSPATH')) {
     exit;
- }
+}
 
 class quarza {
     public function __construct() {
@@ -19,6 +20,9 @@ class quarza {
         add_action('wp_enqueue_scripts', array($this, 'load_assets'));
 
         add_shortcode('shortcode-test', array($this, 'load_shortcode'));
+
+        //load js 
+        add_action('wp_footer', array($this, 'load_scripts'));
     }
 
     public function create_custom_post_type() {
@@ -63,20 +67,40 @@ class quarza {
 
     }
 
-    public function load_shortcode() 
-    {?>
-    <h!> test </h1>
+    public function load_shortcode() {?>  
 
-    <div class="quarza-form"> 
-    <form id="quarza-form-form">
-        <input type="email" placeholder="email">
+        <style>
+            h1 {
+                text: center;
+            } 
 
-        <button class="btn btn-success btn-block"> Send message </button>
-    </form>
-    </div>
+            .quarza-form {
+                left: 50%
+            }
 
-    <?php //return 'shortcode works';
-    }
+        </style>
+        <h!> test </h1>
+        <div class="quarza-form"> 
+        <form id="quarza-form-form">
+            <input type="email" placeholder="email">
+            <button class="btn btn-success btn-block"> Send message </button>
+        </form>
+        </div>
+    <?php }  
+
+
+    public function load_scripts() {?>
+        <script>
+            (function($){ 
+                $('#quarza-form-form').submit( function(event) {
+                    event.preventDefault();
+                    //alert('yoo');
+
+
+                })
+            })(jQuery);
+        </script>
+    <?php }
 }
 
 new quarza();
