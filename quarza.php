@@ -49,6 +49,7 @@ class quarza {
             'all'
         );
 
+        // adds js script to top
         wp_enqueue_script(
             'quarza',
             plugin_dir_url( __FILE__ ) . '/js/quarza.js',
@@ -56,6 +57,8 @@ class quarza {
             1,
             true
         );
+
+
     }
 }
 
