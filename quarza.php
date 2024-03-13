@@ -2,7 +2,7 @@
 /**
  * Plugin Name: quarza
  * Description: quarza test plugin
- * Author: quarzat
+ * Author: quarza
  * Version 1.0.0
  * 
  */
@@ -11,9 +11,12 @@
     exit;
  }
 
- class quarza {
+class quarza {
     public function __construct() {
         add_action('init', array($this, 'create_custom_post_type'));
+
+        // add assets(js, css)
+        add_action('wp_enqueue_scripts', array($this, 'load_assets'));
     }
 
     public function create_custom_post_type() {
@@ -28,13 +31,32 @@
             'publicly_queryable' => false, 
             'capability' => 'manage_options',
             'labels' => array(
-                'name' => 'contact form'
-                'singular_name' => 'Contact Form entrty'
+                'name' => 'quarza section',
+                'singular_name' => 'quarza shieeett'
             ),
-            'menu_icon' => 'dashicons-media-text',
+            'menu_icon' => 'dashicons-welcome-view-site',
         );
 
         register_post_type('simple_contact_form', $args);
     }
- }
 
+    public function load_assets() {
+        wp_enqueue_style(
+            'quarza',
+            plugin_dir_url( __FILE__ ) . '/css/quarza.css',
+            array(),
+            1,
+            'all'
+        );
+
+        wp_enqueue_script(
+            'quarza',
+            plugin_dir_url( __FILE__ ) . '/js/quarza.js',
+            array('jquery'),
+            1,
+            true
+        );
+    }
+}
+
+new quarza();
