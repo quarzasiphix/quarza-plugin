@@ -2,7 +2,7 @@
 /**
  * Plugin Name: quarza
  * Description: quarza test plugin
- * Author: quarza
+ * Author: quarzat
  * Version 1.0.0
  * 
 */
