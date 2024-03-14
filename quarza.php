@@ -2,7 +2,7 @@
 /**
  * Plugin Name: quarza
  * Description: quarza test plugin
- * Author: quarzat
+ * Author: quarza
  * Version 1.0.0
  * 
 */
@@ -23,6 +23,8 @@ class quarza {
 
         //load js 
         add_action('wp_footer', array($this, 'load_scripts'));
+    
+        add_action('rest_api_init', array($this, 'register_rest_api'));
     }
 
     public function create_custom_post_type() {
@@ -90,17 +92,63 @@ class quarza {
 
 
     public function load_scripts() {?>
+       <script>
+        //var nonce = '<?php echo wp_create_nonce('wp_rest'); ?>'
         <script>
-            (function($){ 
-                $('#quarza-form-form').submit( function(event) {
-                    event.preventDefault();
-                    //alert('yoo');
+        (function($){ 
+            $('#quarza-form-form').submit( function(event) {
+                event.preventDefault(); // Prevent default form submission
 
+                var form = $(this).serialize();
+                console.log(form);
+
+                $.ajax({
+                    method:'post',
+                    url: '<?php echo esc_url_raw(rest_url('quarza/send-email')); ?>',
+                    headers: { 'X-WP-Nonce': '<?php echo wp_create_nonce( 'wp_rest' ); ?>' },
+                    data: form, // Send form data in the request
 
                 })
-            })(jQuery);
-        </script>
+                .done(function(response) {
+                    // Handle success response
+                    console.log(response);
+                })
+                .fail(function(xhr, status, error) {
+                    // Handle failure response
+                    console.log(xhr.responseText);
+                });
+            });
+        })(jQuery);
+    </script>
     <?php }
+
+    public function register_rest_api() {
+        register_rest_route( 'quarza/', 'send-email', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'handle_contact_form')
+        ));
+    }
+
+    public function handle_contact_form( WP_REST_Request $request ) {
+        // Retrieve request data
+        $parameters = $request->get_params();
+        $headers = $request->get_headers();
+        $nonce = $headers['x_wp_nonce'][0];
+
+        if(wp_verify_nonce($nonce, 'wp_rest')) {
+            echo 'This nonce is correct';
+        }
+        
+        // Now you can use $parameters and $headers as needed
+    
+        // Example usage:
+        $email = $parameters['email'];
+        // Process the received data
+    
+        // Return a response (example)
+        return rest_ensure_response( 'Data received successfully' );
+    }
+    
 }
 
 new quarza();
