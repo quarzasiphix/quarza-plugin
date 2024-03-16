@@ -1,3 +1,3 @@
-alert('test');
+//alert('test');
 
 // working

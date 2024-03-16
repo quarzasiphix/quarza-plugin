@@ -2,7 +2,7 @@
 /**
  * Plugin Name: quarza
  * Description: quarza test plugin
- * Author: quarza
+ * Author: quarzat
  * Version 1.0.0
  * 
 */
@@ -90,7 +90,7 @@ class quarza {
 
     public function load_scripts() {?>
        <script>
-        //var nonce = '<?php echo wp_create_nonce('wp_rest'); ?>'
+        //var nonce = '< ? php echo wp_create_nonce('wp_rest'); ?>'
         <script>
         (function($){ 
             $('#quarza-form-form').submit( function(event) {
